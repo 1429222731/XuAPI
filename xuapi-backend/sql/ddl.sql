@@ -81,3 +81,8 @@ insert into xu_api.`interface_info` (`name`, `description`, `url`, `requestHeade
 insert into xu_api.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('赖智渊', '邓志泽', 'www.emerson-mann.co', '熊明哲', '贺哲瀚', 0, '田鹏', 381422);
 insert into xu_api.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('许涛', '陆致远', 'www.vella-ankunding.name', '贾哲瀚', '莫昊焱', 0, '袁越彬', 4218096);
 insert into xu_api.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('吕峻熙', '沈鹏飞', 'www.shari-reichel.org', '郭鸿煊', '覃烨霖', 0, '熊黎昕', 493);
+
+-- 添加字段 accessKey 和 secretKey
+ALTER TABLE user
+    ADD COLUMN accessKey VARCHAR(512) NOT NULL comment 'accessKey',
+    ADD COLUMN secretKey VARCHAR(512) NOT NULL comment 'secretKey';
