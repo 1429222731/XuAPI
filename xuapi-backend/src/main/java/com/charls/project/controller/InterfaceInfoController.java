@@ -7,6 +7,7 @@ import com.charls.project.common.*;
 import com.charls.project.constant.CommonConstant;
 import com.charls.project.exception.BusinessException;
 import com.charls.project.model.dto.interfaceInfo.InterfaceInfoAddRequest;
+import com.charls.project.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.charls.project.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.charls.project.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.charls.project.model.entity.InterfaceInfo;
@@ -15,6 +16,7 @@ import com.charls.project.model.enums.InterfaceInfoStatusEnum;
 import com.charls.project.service.InterfaceInfoService;
 import com.charls.project.service.UserService;
 import com.charls.xuapiclientsdk.client.XuApiClient;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -263,5 +265,43 @@ public class InterfaceInfoController {
         // 2. 更新数据库
         boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 测试调用
+     *
+     * @param interfaceInfoInvokeRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> offlineInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
+                                                      HttpServletRequest request) {
+        if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Long id = interfaceInfoInvokeRequest.getId();
+        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        // 校验该接口是否存在
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        //  校验该接口是否发布
+        if (oldInterfaceInfo.getStatus() == InterfaceInfoStatusEnum.OFFLINE.getValue()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口已关闭");
+        }
+        // 获取当前登录用户的ak和sk，这样相当于用户自己的这个身份去调用，
+        // 也不会担心它刷接口，因为知道是谁刷了这个接口，会比较安全
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        // 创建一个临时的client，调用接口（这样才能使用用户自己的ak、sk）
+        XuApiClient tempClient = new XuApiClient(accessKey, secretKey);
+        Gson gson = new Gson();
+        com.charls.xuapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.charls.xuapiclientsdk.model.User.class);
+        String userNameByPost = tempClient.getUserNameByPost(user);
+        return ResultUtils.success(userNameByPost);
     }
 }
