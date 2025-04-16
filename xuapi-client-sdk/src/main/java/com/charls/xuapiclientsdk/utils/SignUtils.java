@@ -1,4 +1,4 @@
-package com.charls.xuapiinterface.utils;
+package com.charls.xuapiclientsdk.utils;
 
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;

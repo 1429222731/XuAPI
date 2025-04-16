@@ -1,18 +1,16 @@
-package com.charls.xuapiinterface.client;
+package com.charls.xuapiclientsdk.client;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.charls.xuapiinterface.model.User;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.charls.xuapiclientsdk.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.charls.xuapiinterface.utils.SignUtils.genSign;
+import static com.charls.xuapiclientsdk.utils.SignUtils.genSign;
 
 /**
  * @Author: charls
@@ -35,18 +33,15 @@ public class XuApiClient {
     public String getNameByGet(String name) {
         // 可以单独传入http参数，这样参数会自动做URL编码，拼接在URL中
         HashMap<String, Object> paramMap = new HashMap<>();
-        // 将"name"参数添加到映射中
         paramMap.put("name", name);
         // 使用HttpUtil工具发起GET请求，并获取服务器返回的结果
         String result= HttpUtil.get("http://localhost:8123/api/name/get", paramMap);
-        // 打印服务器返回的结果
         System.out.println(result);
-        // 返回服务器返回的结果
         return result;
     }
 
     // 使用POST方法从服务器获取名称信息
-    public String getNameByPost(@RequestParam String name) {
+    public String getNameByPost(String name) {
         // 可以单独传入http参数，这样参数会自动做URL编码，拼接在URL中
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
@@ -57,7 +52,7 @@ public class XuApiClient {
     }
 
     // 使用POST方法向服务器发送User对象，并获取服务器返回的结果
-    public String getUserNameByPost(@RequestBody User user) {
+    public String getUserNameByPost(User user) {
         // 将User对象转换为JSON字符串
         String json = JSONUtil.toJsonStr(user);
         // 使用HttpRequest工具发起POST请求，并获取服务器的响应
@@ -66,13 +61,9 @@ public class XuApiClient {
                 .addHeaders(getHeaderMap(json))
                 .body(json) // 将JSON字符串设置为请求体
                 .execute(); // 执行请求
-        // 打印服务器返回的状态码
         System.out.println(httpResponse.getStatus());
-        // 获取服务器返回的结果
         String result = httpResponse.body();
-        // 打印服务器返回的结果
         System.out.println(result);
-        // 返回服务器返回的结果
         return result;
     }
 

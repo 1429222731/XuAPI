@@ -3,3 +3,7 @@ server:
   servlet:
     context-path: /api
 
+xuapi:
+  client:
+    access-key: charls
+    secret-key: abcdefgh

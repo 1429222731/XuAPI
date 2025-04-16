@@ -1,7 +1,7 @@
 package com.charls.xuapiinterface.controller;
 
-import com.charls.xuapiinterface.model.User;
-import com.charls.xuapiinterface.utils.SignUtils;
+import com.charls.xuapiclientsdk.model.User;
+import com.charls.xuapiclientsdk.utils.SignUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

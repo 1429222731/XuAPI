@@ -1,4 +1,4 @@
-package com.charls.xuapiinterface.model;
+package com.charls.xuapiclientsdk.model;
 
 import lombok.Data;
 
