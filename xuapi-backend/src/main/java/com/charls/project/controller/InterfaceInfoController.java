@@ -3,10 +3,7 @@ package com.charls.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.charls.project.annotation.AuthCheck;
-import com.charls.project.common.BaseResponse;
-import com.charls.project.common.DeleteRequest;
-import com.charls.project.common.ErrorCode;
-import com.charls.project.common.ResultUtils;
+import com.charls.project.common.*;
 import com.charls.project.constant.CommonConstant;
 import com.charls.project.exception.BusinessException;
 import com.charls.project.model.dto.interfaceInfo.InterfaceInfoAddRequest;
@@ -14,8 +11,10 @@ import com.charls.project.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.charls.project.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.charls.project.model.entity.InterfaceInfo;
 import com.charls.project.model.entity.User;
+import com.charls.project.model.enums.InterfaceInfoStatusEnum;
 import com.charls.project.service.InterfaceInfoService;
 import com.charls.project.service.UserService;
+import com.charls.xuapiclientsdk.client.XuApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 接口信息接口
+ * 接口管理
  *
  * @author charls
  */
@@ -40,6 +39,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private XuApiClient xuApiClient;
 
     // region 增删改查
 
@@ -196,4 +198,70 @@ public class InterfaceInfoController {
 
     // endregion
 
+    /**
+     * 发布
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        // 1. 校验该接口是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 2. 判断该接口是否可以调用(假数据，模拟)
+        com.charls.xuapiclientsdk.model.User user = new com.charls.xuapiclientsdk.model.User();
+        user.setUsername("charls");
+        String username = xuApiClient.getUserNameByPost(user);
+        if (StringUtils.isBlank(username)) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口验证失败");
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        // 接口可以调用，然后修改数据库中的状态字段
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.ONLINE.getValue());
+        // 3. 更新数据库
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        // 1. 校验该接口是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        // 下线直接修改状态字段
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
+        // 2. 更新数据库
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
 }
