@@ -86,3 +86,7 @@ insert into xu_api.`interface_info` (`name`, `description`, `url`, `requestHeade
 ALTER TABLE user
     ADD COLUMN accessKey VARCHAR(512) NOT NULL comment 'accessKey',
     ADD COLUMN secretKey VARCHAR(512) NOT NULL comment 'secretKey';
+
+-- 添加字段 requestparams
+ALTER TABLE interface_info
+    ADD COLUMN requestparams TEXT NULL comment '请求参数';
