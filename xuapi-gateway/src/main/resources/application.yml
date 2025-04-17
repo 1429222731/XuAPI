@@ -1,0 +1,52 @@
+server:
+  port: 8090
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - AddResponseHeader=source, charls
+      routes:
+        - id: api_route
+          uri: http://localhost:8123
+          predicates:
+            - Path=/api/**
+#        - id: add_request_header_route
+#          uri: http://localhost:8123
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - AddRequestHeader=charls, swag
+#            - AddRequestParameter=name, dog
+#            - name: CircuitBreaker
+#              args:
+#                name: myCircuitBreaker
+#                fallbackUri: forward:/fallback
+#        - id: charls-fallback
+#          uri: https://github:com/1429222731
+#          predicates:
+#            - Path=/fallback
+#        - id: after_route
+#          uri: https://github:com/1429222731
+#          predicates:
+#            - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#        # 将请求路径以/api/**开头的请求转发到目标URI https://github:com/1429222731
+#        - id: path_route
+#          uri: https://github:com/1429222731
+#          predicates:
+#            - Path=/api/**
+#        # 将请求路径以/baidu/**开头的请求转发到目标URI https://baidu.com
+#        - id: path_route2
+#          uri: https://baidu.com
+#          predicates:
+#            - Path=/baidu/**
+
+# 将 Spring Cloud Gateway 的日志级别设置为 "trace"，这意味着 Spring Cloud Gateway 将输出最详细的日志信息，包括所有的跟踪信息。
+# 通过设置这个日志级别，我们可以查看每个请求在网关中的处理流程、断言、过滤器的执行情况以及最终路由的结果，有助于调试和排查问题。
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway:
+            trace
