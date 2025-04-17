@@ -13,15 +13,15 @@ public class XuapiGatewayApplication {
         SpringApplication.run(XuapiGatewayApplication.class, args);
     }
 
-    @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes()
-                // 定义路由规则，给该规则起一个名字 "tobaidu"
-                .route("tobaidu", r -> r.path("/baidu")
-                        // 将满足 "/baidu" 路径的请求转发到 "https://www.baidu.com"
-                        .uri("https://www.baidu.com"))
-                .route("tocharls", r -> r.path("/charls")
-                        .uri("https://github.com/1429222731"))
-                .build();
-    }
+//    @Bean
+//    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+//        return builder.routes()
+//                // 定义路由规则，给该规则起一个名字 "tobaidu"
+//                .route("tobaidu", r -> r.path("/baidu")
+//                        // 将满足 "/baidu" 路径的请求转发到 "https://www.baidu.com"
+//                        .uri("https://www.baidu.com"))
+//                .route("tocharls", r -> r.path("/charls")
+//                        .uri("https://github.com/1429222731"))
+//                .build();
+//    }
 }

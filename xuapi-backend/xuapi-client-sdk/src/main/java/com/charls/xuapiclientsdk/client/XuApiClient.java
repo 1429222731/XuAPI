@@ -24,6 +24,8 @@ public class XuApiClient {
 
     private String secretKey;
 
+    private static final String GATEWAY_HOST = "http://localhost:8090";
+
     public XuApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
@@ -35,7 +37,7 @@ public class XuApiClient {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
         // 使用HttpUtil工具发起GET请求，并获取服务器返回的结果
-        String result= HttpUtil.get("http://localhost:8123/api/name/get", paramMap);
+        String result= HttpUtil.get(GATEWAY_HOST + "/api/name/get", paramMap);
         System.out.println(result);
         return result;
     }
@@ -46,7 +48,7 @@ public class XuApiClient {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
         // 使用HttpUtil工具发起POST请求，并获取服务器返回的结果
-        String result= HttpUtil.post("http://localhost:8123/api/name/post", paramMap);
+        String result= HttpUtil.post(GATEWAY_HOST + "/api/name/post", paramMap);
         System.out.println(result);
         return result;
     }
@@ -56,7 +58,7 @@ public class XuApiClient {
         // 将User对象转换为JSON字符串
         String json = JSONUtil.toJsonStr(user);
         // 使用HttpRequest工具发起POST请求，并获取服务器的响应
-        HttpResponse httpResponse = HttpRequest.post("http://localhost:8123/api/name/user")
+        HttpResponse httpResponse = HttpRequest.post(GATEWAY_HOST + "/api/name/user")
                 // 添加构造的请求头
                 .addHeaders(getHeaderMap(json))
                 .body(json) // 将JSON字符串设置为请求体

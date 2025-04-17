@@ -7,10 +7,13 @@ spring:
       default-filters:
         - AddResponseHeader=source, charls
       routes:
+        # 定义了一个名为"api_route"的路由规则,该规则将匹配以"/api/"开头的路径,例如"/api/user",
+        # 并将这些请求转发到"http://localhost:8123"这个目标地址
         - id: api_route
           uri: http://localhost:8123
           predicates:
             - Path=/api/**
+
 #        - id: add_request_header_route
 #          uri: http://localhost:8123
 #          predicates:
@@ -26,6 +29,7 @@ spring:
 #          uri: https://github:com/1429222731
 #          predicates:
 #            - Path=/fallback
+
 #        - id: after_route
 #          uri: https://github:com/1429222731
 #          predicates:
