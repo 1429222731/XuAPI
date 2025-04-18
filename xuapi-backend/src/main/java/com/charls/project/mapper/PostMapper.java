@@ -1,7 +1,7 @@
 package com.charls.project.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.charls.project.model.entity.Post;
+import com.charls.xuapicommon.model.entity.Post;
 
 /**
 * @author charlsli

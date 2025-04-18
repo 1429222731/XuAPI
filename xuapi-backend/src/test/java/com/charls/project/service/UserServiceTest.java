@@ -1,6 +1,6 @@
 package com.charls.project.service;
 
-import com.charls.project.model.entity.User;
+import com.charls.xuapicommon.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

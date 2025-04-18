@@ -1,7 +1,7 @@
 package com.charls.project.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.charls.project.model.entity.UserInterfaceInfo;
+import com.charls.xuapicommon.model.entity.UserInterfaceInfo;
 
 /**
 * @author Charls

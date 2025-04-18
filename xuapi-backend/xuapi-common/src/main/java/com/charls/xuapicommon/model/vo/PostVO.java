@@ -1,4 +1,4 @@
-package com.charls.project.model.vo;
+package com.charls.xuapicommon.model.vo;
 
 import com.charls.xuapicommon.model.entity.Post;
 import lombok.Data;

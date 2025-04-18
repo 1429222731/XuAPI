@@ -1,7 +1,7 @@
 package com.charls.project.mapper;
 
-import com.charls.project.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.charls.xuapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author Charls
