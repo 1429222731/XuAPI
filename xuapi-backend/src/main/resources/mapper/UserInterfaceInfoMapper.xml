@@ -21,4 +21,18 @@
         totalNum,leftNum,status,
         createTime,updateTime,isDelete
     </sql>
+
+    <!--select interfaceInfoId, SUM(totalNum) as totalNum
+        from user_interface_info
+        group by interfaceInfoId
+        order by totalNum desc
+        limit 3;-->
+    <select id="listTopInvokeInterfaceInfo" resultType="com.charls.xuapicommon.model.entity.UserInterfaceInfo">
+        select interfaceInfoId, SUM(totalNum) as totalNum
+        from user_interface_info
+        group by interfaceInfoId
+        order by totalNum desc
+        limit #{limit};
+    </select>
+
 </mapper>
