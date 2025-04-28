@@ -141,6 +141,6 @@
 
 ##  前端部署
 
-1. 项目打开执行`npm isntall`
+1. 项目打开执行`npm install`
 2. 执行`package.json`文件中命令`"dev": "npm run start:dev"`
 3. 访问：http://localhost:8000/       
